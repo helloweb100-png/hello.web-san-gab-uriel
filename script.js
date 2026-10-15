@@ -666,16 +666,16 @@
      El iframe de Google Maps es pesado: se carga cuando falta poco para verlo y en tiempo ocioso,
      no durante el scroll de las secciones anteriores. */
   function initMap() {
-    const f = $('.map iframe[data-src]');
-    if (!f) return;
-    const load = () => { if (f.src) return; f.src = f.dataset.src; };
-    if (!('IntersectionObserver' in window)) return load();
-    const io = new IntersectionObserver(es => {
-      if (!es[0].isIntersecting) return;
-      io.disconnect();
-      'requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 1500 }) : setTimeout(load, 200);
-    }, { rootMargin: '350px 0px' });
-    io.observe(f);
+    $$('.map iframe[data-src]').forEach(f => {
+      const load = () => { if (f.src) return; f.src = f.dataset.src; };
+      if (!('IntersectionObserver' in window)) return load();
+      const io = new IntersectionObserver(es => {
+        if (!es[0].isIntersecting) return;
+        io.disconnect();
+        'requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 1500 }) : setTimeout(load, 200);
+      }, { rootMargin: '350px 0px' });
+      io.observe(f);
+    });
   }
 
   /* ------------------------------------------------------------------ Orquestación */
