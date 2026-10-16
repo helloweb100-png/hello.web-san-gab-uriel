@@ -17,7 +17,7 @@
   --ff-display:"Cormorant Garamond","Times New Roman",serif;
   --ff-body:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --ease:cubic-bezier(.22,1,.36,1); --ease-io:cubic-bezier(.76,0,.24,1);
-  --header-h:4.4rem; --gutter:clamp(1.25rem,5vw,3rem); --maxw:1240px;
+  --areas-h:2.7rem; --header-h:calc(4.4rem + var(--areas-h)); --gutter:clamp(1.25rem,5vw,3rem); --maxw:1240px;
   --r:16px; --r-lg:26px; --r-xl:36px;
   /* degradado del texto en cursiva (claro) */
   --em-a:var(--blue); --em-b:var(--blue-500); --em-c:var(--gold-600);
@@ -122,7 +122,16 @@ em{font-style:italic}
 /* 06 · Header + menú móvil --------------------------------------------------- */
 .progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:1100;pointer-events:none}
 .progress i{will-change:transform;display:block;height:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--sky-300),var(--gold),var(--gold-300));box-shadow:0 0 12px rgb(233 183 48 / .8)}
-.header{position:fixed;inset:0 0 auto 0;z-index:1000;height:var(--header-h);border-bottom:1px solid transparent;transition:transform .7s var(--ease),background .5s,border-color .5s;will-change:transform}
+/* Selector de área Medicina / Estética: barra fija, siempre visible (el header se apoya debajo) */
+.areas{position:fixed;inset:0 0 auto 0;z-index:1050;height:var(--areas-h);display:flex;align-items:center;justify-content:center;padding-inline:var(--gutter);background:rgb(6 11 34 / .94);border-bottom:1px solid rgb(255 255 255 / .08);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.areas__switch{display:inline-grid;grid-template-columns:1fr 1fr;gap:.2rem;padding:.2rem;border-radius:999px;background:rgb(255 255 255 / .07);border:1px solid rgb(255 255 255 / .18)}
+.areas__opt{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-width:6.9rem;padding:.4rem 1rem;border-radius:999px;font:800 .72rem/1 var(--ff-body);letter-spacing:.14em;text-transform:uppercase;color:#c9d5f2;transition:background .4s var(--ease),color .3s,box-shadow .4s}
+.areas__opt .ico{width:.95rem;height:.95rem;flex:none}
+.areas__opt:hover{color:#fff;background:rgb(255 255 255 / .12)}
+.areas__opt[aria-current="page"]{color:#2a1d00;background:linear-gradient(135deg,var(--gold-300),var(--gold));box-shadow:0 6px 18px -8px rgb(233 183 48 / .85);pointer-events:none}
+.areas__opt:focus-visible{outline:2px solid var(--gold-300);outline-offset:2px}
+@media (min-width:700px){.areas__opt{min-width:8.6rem;font-size:.76rem}}
+.header{position:fixed;inset:var(--areas-h) 0 auto 0;z-index:1000;height:calc(var(--header-h) - var(--areas-h));border-bottom:1px solid transparent;transition:transform .7s var(--ease),background .5s,border-color .5s;will-change:transform}
 .header.is-solid{background:rgb(10 18 51 / .93);border-color:rgb(255 255 255 / .08)}
 .header.is-hidden{transform:translateY(-102%)}
 .header__in{height:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem}
@@ -140,9 +149,9 @@ em{font-style:italic}
 .burger i{display:block;width:1.15rem;height:2px;border-radius:2px;background:#fff;transition:transform .5s var(--ease)}
 html.menu-open .burger i:first-child{transform:translateY(4px) rotate(45deg)}
 html.menu-open .burger i:last-child{transform:translateY(-4px) rotate(-45deg)}
-.menu{position:fixed;inset:0;z-index:900;overflow:auto;background:radial-gradient(90% 60% at 80% 0%,#16286b,transparent 70%),var(--navy-950);color:#fff;visibility:hidden;clip-path:circle(0 at calc(100% - 2.6rem) 2.2rem);transition:clip-path .9s var(--ease-io),visibility 0s .9s}
-html.menu-open .menu{visibility:visible;clip-path:circle(150% at calc(100% - 2.6rem) 2.2rem);transition:clip-path .9s var(--ease-io),visibility 0s}
-.menu__in{min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:2.2rem;padding-block:6.5rem 2rem}
+.menu{position:fixed;inset:0;z-index:900;overflow:auto;background:radial-gradient(90% 60% at 80% 0%,#16286b,transparent 70%),var(--navy-950);color:#fff;visibility:hidden;clip-path:circle(0 at calc(100% - 2.6rem) calc(var(--areas-h) + 2.2rem));transition:clip-path .9s var(--ease-io),visibility 0s .9s}
+html.menu-open .menu{visibility:visible;clip-path:circle(150% at calc(100% - 2.6rem) calc(var(--areas-h) + 2.2rem));transition:clip-path .9s var(--ease-io),visibility 0s}
+.menu__in{min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:2.2rem;padding-block:calc(6.5rem + var(--areas-h)) 2rem}
 .menu nav a{display:flex;align-items:baseline;gap:1rem;padding:.15rem 0;font:600 clamp(2.5rem,11vw,3.8rem)/1.12 var(--ff-display);opacity:0;transform:translateY(26px);transition:opacity .6s var(--ease),transform .8s var(--ease),color .3s}
 .menu nav a small{font:700 .72rem var(--ff-body);letter-spacing:.2em;color:var(--gold-300)}
 .menu nav a:hover{color:var(--gold-300)}
@@ -512,11 +521,11 @@ html.has-cursor .cursor{opacity:1}
   .footer__grid{grid-template-columns:1.4fr .8fr 1fr}
 }
 @media (min-width:900px){
-  :root{--header-h:4.9rem}
+  :root{--header-h:calc(4.9rem + var(--areas-h))}
   .brand img{height:3.1rem}
   .hero__grid{grid-template-columns:1.05fr .95fr;gap:2rem}
   .hero__stage{padding:3.5rem 0 2rem}
-  .portal{width:min(100%,420px,calc((100svh - 15rem) * .7317))}
+  .portal{width:min(100%,420px,calc((100svh - 15rem - var(--areas-h)) * .7317))}
   .chip{font-size:.84rem}
   .scroll-cue{display:flex}
   .expand__frame{clip-path:inset(15% 5% 15% 52% round 38px)}
